@@ -178,3 +178,9 @@ variable "efs_security_group" {
   description = "Security Group ID for EFS"
   type        = string
 }
+
+variable "public_endpoint" {
+  description = "Enable public endpoint for EKS control plane API."
+  type        = bool
+  default     = false
+}

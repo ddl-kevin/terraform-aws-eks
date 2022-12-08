@@ -256,3 +256,9 @@ variable "kubeconfig_path" {
   type        = string
   default     = ""
 }
+
+variable "direct_configuration" {
+  description = "Terraform should connect to EKS directly to configure the cluster"
+  type        = bool
+  default     = false
+}

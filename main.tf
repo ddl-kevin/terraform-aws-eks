@@ -144,6 +144,7 @@ module "eks" {
   additional_node_groups    = var.additional_node_groups
   node_iam_policies         = [module.storage.s3_policy]
   efs_security_group        = module.storage.efs_security_group
+  public_endpoint           = var.direct_configuration
 
   depends_on = [
     module.network
@@ -168,4 +169,12 @@ module "k8s_setup" {
     module.eks,
     module.bastion
   ]
+}
+
+module "k8s_setup_direct" {
+  count  = var.direct_configuration ? 1 : 0
+  source = "./submodules/k8s-direct"
+
+  eks_node_role_arns   = [for r in module.eks.eks_node_roles : r.arn]
+  eks_master_role_arns = [for r in concat(values(data.aws_iam_role.eks_master_roles), module.eks.eks_master_roles) : r.arn]
 }
