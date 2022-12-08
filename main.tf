@@ -53,19 +53,15 @@ locals {
 
 locals {
   bastion_user     = "ec2-user"
-  ssh_pvt_key_path = abspath(pathexpand(var.ssh_pvt_key_path))
+  ssh_pvt_key_path = abspath(pathexpand("./${var.deploy_id}.pem"))
   kubeconfig_path  = var.kubeconfig_path != "" ? abspath(pathexpand(var.kubeconfig_path)) : "${path.cwd}/kubeconfig"
 }
 
 ## Importing SSH pvt key to access bastion and EKS nodes
 
-data "tls_public_key" "domino" {
-  private_key_openssh = file(var.ssh_pvt_key_path)
-}
-
 resource "aws_key_pair" "domino" {
   key_name   = var.deploy_id
-  public_key = trimspace(data.tls_public_key.domino.public_key_openssh)
+  public_key = trimspace(base64decode(var.ssh_pvt_key_content_basee64))
 }
 
 module "storage" {
@@ -75,6 +71,12 @@ module "storage" {
   s3_force_destroy_on_deletion = var.s3_force_destroy_on_deletion
   vpc_id                       = local.vpc_id
   subnet_ids                   = [for s in local.private_subnets : s.subnet_id]
+}
+
+resource "local_sensitive_file" "domino_ssh_key" {
+  file_permission = "0400"
+  content_base64  = var.ssh_pvt_key_content_basee64
+  filename        = "./${var.deploy_id}.pem"
 }
 
 locals {
