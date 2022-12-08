@@ -242,10 +242,6 @@ variable "efs_access_point_path" {
 variable "ssh_pvt_key_path" {
   type        = string
   description = "SSH private key filepath."
-  validation {
-    condition     = fileexists(var.ssh_pvt_key_path)
-    error_message = "Private key does not exist. Please provide the right path or generate a key with the following command: ssh-keygen -q -P '' -t rsa -b 4096 -m PEM -f domino.pem"
-  }
 }
 
 variable "s3_force_destroy_on_deletion" {
