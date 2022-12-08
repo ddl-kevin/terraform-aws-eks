@@ -59,9 +59,13 @@ locals {
 
 ## Importing SSH pvt key to access bastion and EKS nodes
 
+data "tls_public_key" "domino" {
+  private_key_openssh = base64decode(var.ssh_pvt_key_content_base64)
+}
+
 resource "aws_key_pair" "domino" {
   key_name   = var.deploy_id
-  public_key = trimspace(base64decode(var.ssh_pvt_key_content_basee64))
+  public_key = trimspace(data.tls_public_key.domino.public_key_openssh)
 }
 
 module "storage" {
@@ -75,7 +79,7 @@ module "storage" {
 
 resource "local_sensitive_file" "domino_ssh_key" {
   file_permission = "0400"
-  content_base64  = var.ssh_pvt_key_content_basee64
+  content_base64  = var.ssh_pvt_key_content_base64
   filename        = "./${var.deploy_id}.pem"
 }
 

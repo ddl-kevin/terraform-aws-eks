@@ -239,7 +239,7 @@ variable "efs_access_point_path" {
   default     = "/domino"
 }
 
-variable "ssh_pvt_key_content_basee64" {
+variable "ssh_pvt_key_content_base64" {
   type        = string
   description = "SSH private key material."
   sensitive   = true
