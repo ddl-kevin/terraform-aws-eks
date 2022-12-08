@@ -179,8 +179,8 @@ variable "efs_security_group" {
   type        = string
 }
 
-variable "public_endpoint" {
-  description = "Enable public endpoint for EKS control plane API."
+variable "direct_configuration" {
+  description = "Terraform should connect to EKS directly to configure the cluster"
   type        = bool
   default     = false
 }

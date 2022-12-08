@@ -1,10 +1,10 @@
 locals {
-  eks_master_roles = [for role, arn in var.eks_master_role_arns : {
+  eks_master_roles = [for role, arn in [aws_iam_role.eks_cluster] : {
     rolearn  = arn,
     username = role,
     groups   = ["system:masters"]
   }]
-  eks_node_roles = [for arn in var.eks_node_role_arns : {
+  eks_node_roles = [for arn in [aws_iam_role.eks_nodes] : {
     rolearn  = arn,
     username = "system:node:{{EC2PrivateDNSName}}",
     groups   = ["system:bootstrappers", "system:nodes"]
@@ -13,6 +13,8 @@ locals {
 }
 
 resource "kubernetes_config_map" "aws_auth" {
+  count = var.direct_configuration ? 1 : 0
+
   metadata {
     name      = "aws-auth"
     namespace = "kube-system"
