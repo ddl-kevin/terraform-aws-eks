@@ -37,3 +37,8 @@ output "kubeconfig" {
   description = "location of kubeconfig"
   value       = local.kubeconfig_path
 }
+
+output "eks_cluster_id" {
+  description = "EKS Cluster Id / Name"
+  value       = module.eks.eks_cluster_id
+}

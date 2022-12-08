@@ -23,3 +23,8 @@ output "eks_master_roles" {
   description = "EKS master roles."
   value       = [aws_iam_role.eks_cluster]
 }
+
+output "eks_cluster_id" {
+  value       = aws_eks_cluster.this.name
+  description = "EKS Cluster Id / Name"
+}
