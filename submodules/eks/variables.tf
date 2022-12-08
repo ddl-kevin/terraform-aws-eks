@@ -184,3 +184,9 @@ variable "direct_configuration" {
   type        = bool
   default     = false
 }
+
+variable "tigera_version" {
+  type        = string
+  description = "Calico operator version."
+  default     = "v3.21.4"
+}
